@@ -54,62 +54,34 @@ echo "Environment ok"
 
 cd /app
 
-if [ ! -d "lib" ]; then
-    echo "Creating library folder"
-    mkdir lib
+echo "Testing for iDRAC type"
+
+if curl -s -k "https://${IDRAC_HOST}:${IDRAC_PORT}/login.html" --compressed | grep -q iDRAC6
+then
+        echo "${GREEN}This is an iDRAC6 server${NC}"
+        IDRAC_JNLP="IDRAC6.jnlp"
+	sed -i "s/REPLACE_WITH_IP/${IDRAC_HOST}/" /templates/IDRAC6.jnlp
+        sed -i "s/REPLACE_WITH_PORT/${IDRAC_PORT}/" /templates/IDRAC6.jnlp
+	sed -i "s/REPLACE_WITH_USER/${IDRAC_USER}/" /templates/IDRAC6.jnlp
+	sed -i "s/REPLACE_WITH_PASSWD/${IDRAC_PASSWORD}/" /templates/IDRAC6.jnlp
+elif curl -s -k "https://${IDRAC_HOST}:${IDRAC_PORT}/data?get=prodServerGen" | grep -q 12G; then
+        echo "${GREEN}This is an iDRAC7 server${NC}"
+	IDRAC_JNLP="IDRAC78.jnlp"
+	sed -i "s/REPLACE_WITH_IP/${IDRAC_HOST}/" /templates/IDRAC78.jnlp
+        sed -i "s/REPLACE_WITH_PORT/${IDRAC_PORT}/" /templates/IDRAC78.jnlp
+        sed -i "s/REPLACE_WITH_USER/${IDRAC_USER}/" /templates/IDRAC78.jnlp
+        sed -i "s/REPLACE_WITH_PASSWD/${IDRAC_PASSWORD}/" /templates/IDRAC78.jnlp
+elif curl -s -k "https://${IDRAC_HOST}:${IDRAC_PORT}/data?get=prodServerGen" | grep -q 13G; then
+        echo "${GREEN}This is an iDRAC8 server${NC}"
+	IDRAC_JNLP="IDRAC78.jnlp"
+        sed -i "s/REPLACE_WITH_IP/${IDRAC_HOST}/" /templates/IDRAC78.jnlp
+        sed -i "s/REPLACE_WITH_PORT/${IDRAC_PORT}/" /templates/IDRAC78.jnlp
+        sed -i "s/REPLACE_WITH_USER/${IDRAC_USER}/" /templates/IDRAC78.jnlp
+        sed -i "s/REPLACE_WITH_PASSWD/${IDRAC_PASSWORD}/" /templates/IDRAC78.jnlp
+else
+	echo "${RED}Unknown iDRAC type... this container only supports iDRAC 6-8${NC}"
+	exit 1
 fi
-
-if [ ! -f avctKVM.jar ]; then
-    echo "Downloading avctKVM"
-
-    wget https://${IDRAC_HOST}:${IDRAC_PORT}/software/avctKVM.jar --no-check-certificate
-
-    if [ ! $? -eq 0 ]; then
-        echo "${RED}Failed to download avctKVM.jar, please check your settings${NC}"
-        sleep 2
-        exit 2
-    fi
-fi
-
-if [ ! -f lib/avctKVMIOLinux64.jar ]; then
-    echo "Downloading avctKVMIOLinux64"
-
-    wget -O lib/avctKVMIOLinux64.jar https://${IDRAC_HOST}:${IDRAC_PORT}/software/avctKVMIOLinux64.jar --no-check-certificate
-
-    if [ ! $? -eq 0 ]; then
-        echo "${RED}Failed to download avctKVMIOLinux64.jar, please check your settings${NC}"
-        sleep 2
-        exit 2
-    fi
-fi
-
-if [ ! -f lib/avctVMLinux64.jar ]; then
-    echo "Downloading avctVMLinux64"
-
-    wget -O lib/avctVMLinux64.jar https://${IDRAC_HOST}:${IDRAC_PORT}/software/avctVMLinux64.jar --no-check-certificate
-
-    if [ ! $? -eq 0 ]; then
-        echo "${RED}Failed to download avctVMLinux64.jar, please check your settings${NC}"
-        sleep 2
-        exit 2
-    fi
-fi
-
-cd lib
-
-if [ ! -f lib/avctKVMIOLinux64.so ]; then
-    echo "Extracting avctKVMIOLinux64"
-
-    jar -xf avctKVMIOLinux64.jar
-fi
-
-if [ ! -f lib/avctVMLinux64.so ]; then
-    echo "Extracting avctVMLinux64"
-
-    jar -xf avctVMLinux64.jar
-fi
-
-cd /app
 
 echo "${GREEN}Initialization complete, starting virtual console${NC}"
 
@@ -119,4 +91,5 @@ if [ -n "$IDRAC_KEYCODE_HACK" ]; then
     export LD_PRELOAD=/keycode-hack.so
 fi
 
-exec java -cp avctKVM.jar -Djava.library.path="./lib" com.avocent.idrac.kvm.Main ip=${IDRAC_HOST} kmport=5900 vport=5900 user=${IDRAC_USER} passwd=${IDRAC_PASSWORD} apcp=1 version=2 vmprivilege=true "helpurl=https://${IDRAC_HOST}:443/help/contents.html"
+exec javaws /templates/${IDRAC_JNLP}
+#exec java -cp avctKVM.jar -Djava.library.path="./lib" com.avocent.idrac.kvm.Main ip=${IDRAC_HOST} kmport=5900 vport=5900 user=${IDRAC_USER} passwd=${IDRAC_PASSWORD} apcp=1 version=2 vmprivilege=true "helpurl=https://${IDRAC_HOST}:443/help/contents.html"
