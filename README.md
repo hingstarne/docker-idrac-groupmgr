@@ -8,7 +8,7 @@
 
 ## About
 
-Allows access to the iDRAC 6 console without installing Java or messing with Java Web Start. Java is only run inside of the container and access is provided via web interface or directly with VNC.
+Allows access to the iDRAC console without installing Java or messing with Java Web Start. Java is only run inside of the container and access is provided via web interface or directly with VNC.
 
 Container is based on [baseimage-gui](https://github.com/jlesage/docker-baseimage-gui) by [jlesage](https://github.com/jlesage)
 
