@@ -9,7 +9,7 @@ RUN apt-get update && \
     apt-get install -y curl software-properties-common && \
     add-apt-repository ppa:openjdk-r/ppa && \
     apt-get update && \
-    apt-get install -y openjdk-8-jdk gcc icetea-netx && \
+    apt-get install -y openjdk-8-jdk gcc icedtea-netx && \
     gcc -o /keycode-hack.so /keycode-hack.c -shared -s -ldl -fPIC && \
     apt-get remove -y gcc software-properties-common && \
     apt-get autoremove -y && \
@@ -18,9 +18,11 @@ RUN apt-get update && \
 
 RUN mkdir /app && \
     chown ${USER_ID}:${GROUP_ID} /app
-    
+
 RUN mkdir /templates && \
     chown ${USER_ID}:${GROUP_ID} /templates
+
+RUN sed -i "/jdk.tls.disabledAlgorithms/,+2 d" /etc/java-8-openjdk/security/java.security
 
 COPY startapp.sh /startapp.sh
 
