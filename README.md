@@ -1,4 +1,4 @@
-# iDRAC 6 dockerized
+# iDRAC dockerized
 
 ![Web interface](https://i.imgur.com/Au9DPmg.png)
 *Web interface*
