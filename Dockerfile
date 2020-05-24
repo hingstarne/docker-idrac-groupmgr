@@ -30,3 +30,5 @@ COPY IDRAC6.jnlp /templates/IDRAC6.jnlp
 COPY IDRAC78.jnlp /templates/IDRAC78.jnlp
 
 WORKDIR /app
+
+ENV PATH="/usr/lib/jvm/java-1.8-openjdk/bin/:${PATH}"
