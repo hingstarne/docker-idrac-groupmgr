@@ -66,18 +66,25 @@ then
 	sed -i "s/REPLACE_WITH_PASSWD/${IDRAC_PASSWORD}/" /templates/IDRAC6.jnlp
 elif curl -s -k "https://${IDRAC_HOST}:${IDRAC_PORT}/data?get=prodServerGen" | grep -q 12G; then
         echo "${GREEN}This is an iDRAC7 server${NC}"
-	IDRAC_JNLP="IDRAC78.jnlp"
-	sed -i "s/REPLACE_WITH_IP/${IDRAC_HOST}/" /templates/IDRAC78.jnlp
-        sed -i "s/REPLACE_WITH_PORT/${IDRAC_PORT}/" /templates/IDRAC78.jnlp
-        sed -i "s/REPLACE_WITH_USER/${IDRAC_USER}/" /templates/IDRAC78.jnlp
-        sed -i "s/REPLACE_WITH_PASSWD/${IDRAC_PASSWORD}/" /templates/IDRAC78.jnlp
+	IDRAC_JNLP="IDRAC789.jnlp"
+	sed -i "s/REPLACE_WITH_IP/${IDRAC_HOST}/" /templates/IDRAC789.jnlp
+        sed -i "s/REPLACE_WITH_PORT/${IDRAC_PORT}/" /templates/IDRAC789.jnlp
+        sed -i "s/REPLACE_WITH_USER/${IDRAC_USER}/" /templates/IDRAC789.jnlp
+        sed -i "s/REPLACE_WITH_PASSWD/${IDRAC_PASSWORD}/" /templates/IDRAC789.jnlp
 elif curl -s -k "https://${IDRAC_HOST}:${IDRAC_PORT}/data?get=prodServerGen" | grep -q 13G; then
         echo "${GREEN}This is an iDRAC8 server${NC}"
-	IDRAC_JNLP="IDRAC78.jnlp"
-        sed -i "s/REPLACE_WITH_IP/${IDRAC_HOST}/" /templates/IDRAC78.jnlp
-        sed -i "s/REPLACE_WITH_PORT/${IDRAC_PORT}/" /templates/IDRAC78.jnlp
-        sed -i "s/REPLACE_WITH_USER/${IDRAC_USER}/" /templates/IDRAC78.jnlp
-        sed -i "s/REPLACE_WITH_PASSWD/${IDRAC_PASSWORD}/" /templates/IDRAC78.jnlp
+	IDRAC_JNLP="IDRAC789.jnlp"
+        sed -i "s/REPLACE_WITH_IP/${IDRAC_HOST}/" /templates/IDRAC789.jnlp
+        sed -i "s/REPLACE_WITH_PORT/${IDRAC_PORT}/" /templates/IDRAC789.jnlp
+        sed -i "s/REPLACE_WITH_USER/${IDRAC_USER}/" /templates/IDRAC789.jnlp
+        sed -i "s/REPLACE_WITH_PASSWD/${IDRAC_PASSWORD}/" /templates/IDRAC789.jnlp
+elif curl -s -k "https://${IDRAC_HOST}:${IDRAC_PORT}/sysmgmt/2015/bmc/info" | grep -q "14G"; then
+        echo "${GREEN}This is an iDRAC9 server${NC}"
+	IDRAC_JNLP="IDRAC789.jnlp"
+        sed -i "s/REPLACE_WITH_IP/${IDRAC_HOST}/" /templates/IDRAC789.jnlp
+        sed -i "s/REPLACE_WITH_PORT/${IDRAC_PORT}/" /templates/IDRAC789.jnlp
+        sed -i "s/REPLACE_WITH_USER/${IDRAC_USER}/" /templates/IDRAC789.jnlp
+        sed -i "s/REPLACE_WITH_PASSWD/${IDRAC_PASSWORD}/" /templates/IDRAC789.jnlp
 else
 	echo "${RED}Unknown iDRAC type... this container only supports iDRAC 6-8${NC}"
 	exit 1

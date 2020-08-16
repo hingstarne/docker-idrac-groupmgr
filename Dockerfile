@@ -27,7 +27,7 @@ RUN sed -i "/jdk.tls.disabledAlgorithms/,+2 d" /etc/java-8-openjdk/security/java
 COPY startapp.sh /startapp.sh
 
 COPY IDRAC6.jnlp /templates/IDRAC6.jnlp
-COPY IDRAC78.jnlp /templates/IDRAC78.jnlp
+COPY IDRAC789.jnlp /templates/IDRAC789.jnlp
 
 WORKDIR /app
 
