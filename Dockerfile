@@ -28,6 +28,7 @@ COPY startapp.sh /startapp.sh
 
 COPY IDRAC6.jnlp /templates/IDRAC6.jnlp
 COPY IDRAC789.jnlp /templates/IDRAC789.jnlp
+COPY GROUPMGR.jnlp /templates/GROUPMGR.jnlp
 
 WORKDIR /app
 
